@@ -1,0 +1,36 @@
+High Level Design
+
+Steps..
+
+1) Take a video stream from a stereo pair of cameras mounted on a robot, feed the video stream through a Stereo Matching algorithm to 
+produce a disparity image for each frame, that convert this to a Point Cloud PLY file.
+2) Take the PLY file and find the floor of the image, and create a 2D map in a Trinity Format 
+(Trinity format, -1 unknown, 0 clear floor, 100, obsticles greater than 5mm above the floor)
+3) Using the 2D map decide how to navigate based on the Trinity information. 
+( forward, backwards, left and right, in a mowing the lawn strategy around the room, avoiding all 100's and only moving over 0's )
+4) As you are moving get the next set of video frames, create the disparity, the PLY and then improve the 2D map, and keep naivigating
+untill the lawn has been mowed.
+
+Navigation of the room at a High Level.
+
+Things to consider:-
+
+Video Stream:- format, fps, dimensions
+Stereo Matching algorith :- Many to choose from  SBM, SGBM, DNN based etc
+PLY:- format?
+How to find the floor of the room?, does the PLY need to be Transformed?
+As you move merging multiple PLY's does this become computationally expensive as the size of the measurable room expands
+and will this work in very large rooms.
+Navigating the Robot:- 4 basic rules
+(1) The room is a very basic square or rectangular room to start off with (adapt this later).
+(2) only move over 0's in the Trinity map (-1's could be considered in a later design) 
+(3) The robot will start in the middle of the room in a free uncluttered section of the room.
+(4) Use a mow the lawn strategy to navigate.
+Based on these four basic rules - decide which direction to mow the lawn in as early in the process as is possible based on the 2D map 
+information - so the best thing to do when initiating the navigation is to get a 360 degree look at the room to create a good 2D map and
+then work out the direction to start mowing the lawn. So turn left or right for a 360 turn, gather the 2D map and make decisions based on
+the Trinity information, avoid all 100's only stay on the 0's.  
+Mowing the lawn strategy, its a given that you start in the middle of the room. so with the 2D map, if you can identify a corner of the 
+room then navigate to that corner if there is a clear path and start mowing the lawn from there. If you can't identify a corner, then start 
+from the midlle do one half of the room and then move over to the middle again and do the other half. Once all mowing is done stop.
+
