@@ -2,6 +2,14 @@ High Level Design
 
 Steps..
 
+refinements.. 
+
+In order to get 3D orientation you need 6DOF - IMU provides translation (float) x,y,z and rotation (quaternion) w,x,y,z along with some other params that deal with quality. Using this data, and a depth-map (this can be obtained by a lot of different methods (stereo photography/video stream, lidar, infrared, ultrasonic acoustics) but basically you end up with a 3D image. So you have 2 main inputs. A 3rd could be odometry if you have that as well. So those are your initial inputs, the 3D image will be boiled down to a 2D map x,y in a world view of your chosing and this can be a DNN layer(s) for sure.
+
+Now the 3D orientation has a direct absolute computable reference to the 2D map, so plotting your location on the 2D map with relation to the position of the IMU is acheivable (all of this assumes a fixed height above the floor for your IMU). So now you can go ahead and do SLAM. Now here is the really interesting question, how easy is mowing the lawn using a SLAM DNN with 2 or possibly three inputs and the Driving instructions as output (Left(AVD), right(AVD) forwards(AVD), backwards(AVD, Always good to have an emergency stop ability as well don't really want to run over somebody, safety first is the moto of the day), all in a constant feedback loop, training and realtime execution simultaneously? Its going to be fun to implement thats for sure. 
+
+Note: Choice of Neural Net (Tensaflow, Caffe2, Nvidia's Tensaflow, RoCM based DNN, AWS, DeepMind, Python based, OpenCV etc) this is a project in itself evaluating the pros and cons. So I will quickly pick one and move on.
+
 1) Take a video stream from a stereo pair of cameras mounted on a robot, feed the video stream through a Stereo Matching algorithm to 
 produce a disparity image for each frame, that convert this to a Point Cloud PLY file.
 2) Take the PLY file and find the floor of the image, and create a 2D map in a Trinity Format 
@@ -16,21 +24,22 @@ Navigation of the room at a High Level.
 Things to consider:-
 
 Video Stream:- format, fps, dimensions
-Stereo Matching algorith :- Many to choose from  SBM, SGBM, DNN based etc
+Stereo Matching algorith :- Many to choose from  SBM, SGBM, DNN based etc - 
 PLY:- format?
 How to find the floor of the room?, does the PLY need to be Transformed?
 As you move merging multiple PLY's does this become computationally expensive as the size of the measurable room expands
 and will this work in very large rooms.
 Navigating the Robot:- 4 basic rules
 (1) The room is a very basic square or rectangular room to start off with (adapt this later).
-(2) only move over 0's in the Trinity map (-1's could be considered in a later design) 
+(2) only move over 0's in the Trinity map (-1's could be considered in a later design). Adapt Trinity to RGB pixel values in a PNG.
 (3) The robot will start in the middle of the room in a free uncluttered section of the room.
 (4) Use a mow the lawn strategy to navigate.
 Based on these four basic rules - decide which direction to mow the lawn in as early in the process as is possible based on the 2D map 
 information - so the best thing to do when initiating the navigation is to get a 360 degree look at the room to create a good 2D map and
-then work out the direction to start mowing the lawn. So turn left or right for a 360 turn, gather the 2D map and make decisions based on
-the Trinity information, avoid all 100's only stay on the 0's.  
+then work out the direction to start mowing the lawn. So turn left or right for a 360 turn, gather the 2D map and make decisions based on the Trinity information, avoid all 100's only stay on the 0's.  
 Mowing the lawn strategy, its a given that you start in the middle of the room. so with the 2D map, if you can identify a corner of the 
 room then navigate to that corner if there is a clear path and start mowing the lawn from there. If you can't identify a corner, then start 
 from the midlle do one half of the room and then move over to the middle again and do the other half. Once all mowing is done stop.
+
+Ok this is done Now, post software soon. May21st 2019 (SPAR).
 
