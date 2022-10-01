@@ -13,6 +13,8 @@ Now the 3D orientation has a direct absolute computable reference to the 2D map,
 
 Note: Choice of Neural Net (Tensaflow, Caffe2, Nvidia's Tensaflow, RoCM based DNN, AWS, DeepMind, Python based, OpenCV etc) this is a project in itself evaluating the pros and cons. So I will quickly pick one and move on.
 
+DeepMind!
+
 1) Take a video stream from a stereo pair of cameras mounted on a robot, feed the video stream through a Stereo Matching algorithm to 
 produce a disparity image for each frame, that convert this to a Point Cloud PLY file.
 2) Take the PLY file and find the floor of the image, and create a 2D map in a Trinity Format 
