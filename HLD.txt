@@ -4,7 +4,10 @@ Steps..
 
 refinements.. 
 
-In order to get 3D orientation you need 6DOF - IMU provides translation (float) x,y,z and rotation (quaternion) w,x,y,z along with some other params that deal with quality. Using this data, and a depth-map (this can be obtained by a lot of different methods (stereo photography/video stream, lidar, infrared, ultrasonic acoustics) but basically you end up with a 3D image. So you have 2 main inputs. A 3rd could be odometry if you have that as well. So those are your initial inputs, the 3D image will be boiled down to a 2D map x,y in a world view of your chosing and this can be a DNN layer(s) for sure.
+In order to get 3D orientation you need 6DOF - IMU provides translation (float) x,y,z and rotation (quaternion) w,x,y,z along with some other params that deal with quality.
+Using this data, and a depth-map (this can be obtained by a lot of different methods (stereo photography/video stream, lidar, infrared, ultrasonic acoustics) but
+basically you end up with a 3D image. So you have 2 main inputs. A 3rd could be odometry if you have that as well. So those are your initial inputs,
+the 3D image will be boiled down to a 2D map x,y in a world view of your chosing and this can be a DNN layer(s) for sure.
 
 Now the 3D orientation has a direct absolute computable reference to the 2D map, so plotting your location on the 2D map with relation to the position of the IMU is acheivable (all of this assumes a fixed height above the floor for your IMU). So now you can go ahead and do SLAM. Now here is the really interesting question, how easy is mowing the lawn using a SLAM DNN with 2 or possibly three inputs and the Driving instructions as output (Left(AVD), right(AVD) forwards(AVD), backwards(AVD, Always good to have an emergency stop ability as well don't really want to run over somebody, safety first is the moto of the day), all in a constant feedback loop, training and realtime execution simultaneously? Its going to be fun to implement thats for sure. 
 
@@ -41,5 +44,5 @@ Mowing the lawn strategy, its a given that you start in the middle of the room. 
 room then navigate to that corner if there is a clear path and start mowing the lawn from there. If you can't identify a corner, then start 
 from the midlle do one half of the room and then move over to the middle again and do the other half. Once all mowing is done stop.
 
-Ok this is done Now, post software soon. May21st 2019 (SPAR).
+Ok this is done Now, post software soon.
 
